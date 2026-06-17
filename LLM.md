@@ -1,4 +1,4 @@
-# studio-rfcs — AI Assistant Context
+# studio-rfcs
 
 # Hanzo Studio RFCs
 
