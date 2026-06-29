@@ -1,3 +1,5 @@
+<p align="center"><img src=".github/hero.svg" alt="studio-rfcs" width="880"></p>
+
 # Hanzo Studio RFCs
 
 RFC (Request for Comments) process for proposing and discussing significant changes to Hanzo Studio.
