@@ -41,10 +41,12 @@ conditioning + feedback.jsonl, wallet + GPU fleet, org tenancy, analytics.
 
 ### Lane order and reality
 
-1. **Video** — nearest: `wan2.2_ti2v_5B` already sits on spark; the Video
-   template exists in the grid. Needs: graph template (ti2v + i2v from a
-   library image), `<video>` player cards, poster-frame thumbs in the manifest
-   sidecar, gate prompt for motion artifacts. No new infra.
+1. **Video** — ✅ SHIPPED (2026-07-18). The Wan 2.2 TI2V-5B lane over the ONE
+   library/queue/flywheel: `_video_graph` (proven node-for-node on spark, ~154s
+   for 640×640×3s), `POST /v1/library/video` (text-to-video or one reference
+   image), mp4/webm ingest + `<video>` poster cards, a motion quality gate
+   (start/mid/end frames), and the Video template card. Built → adversarially
+   verified (composer-lane-reset blocker fixed) → merged. No new infra.
 2. **Music / audio** — engine-served (ACE-class TTA model on the fleet); audio
    cards with waveform + play; gate = audio model scoring. Renders are cheap;
    the flywheel (notes like "too much reverb") ports verbatim.
