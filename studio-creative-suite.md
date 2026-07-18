@@ -47,6 +47,12 @@ conditioning + feedback.jsonl, wallet + GPU fleet, org tenancy, analytics.
    image), mp4/webm ingest + `<video>` poster cards, a motion quality gate
    (start/mid/end frames), and the Video template card. Built → adversarially
    verified (composer-lane-reset blocker fixed) → merged. No new infra.
+1b. **3D** — ✅ SHIPPED (2026-07-18). Hunyuan3D-2.1 image-to-mesh on the GB10:
+   `_model3d_graph` (ImageOnlyCheckpointLoader bundled model+CLIP+VAE +
+   ModelSamplingAuraFlow — both non-obvious and load-bearing) → `.glb`,
+   `POST /v1/library/model3d` (one reference image, no text-to-3D), glTF ingest,
+   and an interactive `<model-viewer>` zoom card. Verified: a clean 3D garment
+   mesh from a ghost-mannequin shot. No new infra.
 2. **Music / audio** — engine-served (ACE-class TTA model on the fleet); audio
    cards with waveform + play; gate = audio model scoring. Renders are cheap;
    the flywheel (notes like "too much reverb") ports verbatim.
