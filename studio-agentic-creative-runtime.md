@@ -77,6 +77,74 @@ content in their own Drive**:
 - One connector interface; Drive is the first, others (Notion, S3, GitHub) drop
   in the same seam. The agent treats Drive content as just more inputs/outputs.
 
+## Creation KINDs + the dynamic questionnaire (the core UX)
+Every kind of thing you make is a **KIND** = a parameterized workflow template +
+a **questionnaire spec** (the fields the AI needs). The copilot runs it:
+
+1. You pick/say a KIND ("product photo", "packaging", "social ad", "spreadsheet",
+   "a song"). 
+2. The AI asks **only what's missing** — a generative questionnaire grounded by
+   your **presets** (model presets, brand/design-system, product refs). Same
+   pattern as Claude Design's "Claude has some questions", but per-KIND and
+   dynamic — it never asks what it can infer from presets or context.
+3. As you chat, the AI **assembles/updates the backend workflow live** — a node
+   graph (via `tasks`→GPU) or an `exec` code flow — then runs it and shows the
+   result.
+4. You **edit the built workflow in Advanced mode**, or keep refining by chat.
+   New KINDs are themselves buildable by AI ("make me a workflow that …") and
+   saved per-org.
+
+**Seed KIND catalog (each = template + questionnaire, all on the substrate above):**
+| KIND | Substrate |
+|---|---|
+| Product photography (CAD/ghost → model/scene) | ComfyUI try-on graph (the karma pipeline, generalized) |
+| Packaging / commerce design | image graph + `exec` (dielines, mockups) |
+| CAD → product builder | CAD ref → try-on/relight graph → ecom set |
+| Social post / ad generator | image/video graph + brand preset + `exec` (copy, layout) |
+| Document (docx · xlsx · pptx · pdf) | `exec` (python-docx/openpyxl/python-pptx/weasyprint) |
+| Audio / music / song | ACE-Step / `mugen` graph |
+| Voice / narration | `koe` / `tts` |
+| Video | Wan / LTX / Hunyuan / CogVideo graph |
+| 3D | 3D node packs (Hunyuan3D-class) + `exec` |
+
+**Presets are the grounding** ("the AI grounded learned model"): model presets,
+brand/design-system presets, product & packaging templates. They pre-fill the
+questionnaire and constrain generation so output is on-brand by default.
+
+## Curation → feedback loop → it gets closer each time
+Every asset carries a curation state (already: draft·approved·queued·published)
+plus **👍/👎 + comments**. That signal is not cosmetic — it **grounds the next
+run**:
+- approved / 👍 assets become **positive exemplars** appended to the preset for
+  that KIND; 👎 + the comment become **negative constraints** — so each pass
+  moves toward what you actually want (preference-conditioning, not fine-tuning
+  required; optional LoRA/preset distillation later).
+- the copilot reads recent curation before assembling a workflow, so "make
+  another like the approved ones, avoid the flagged look" is the default behavior.
+
+Reuse `POST /v1/library/status`; add `POST /v1/library/vote` (👍/👎) + comments
+(already prototyped locally). One store, per-org.
+
+## Fork / clone
+Workflows, **collections**, and design-systems are forkable per-org: clone a
+collection or a proven workflow to spin a new production, document set, site, or
+paper series from a known-good starting point. A fork copies the template +
+presets + curation baseline; edits diverge. One verb (`fork`), any object.
+
+## Specialized editor modes (per KIND)
+The default is chat + preview. Some KINDs get a **dedicated editor mode** when the
+medium demands it — same substrate underneath, richer surface on top:
+- **LaTeX academic papers** — a LaTeX editor mode (source + live PDF), compiled
+  in `exec` (tectonic/latexmk). Papers are authored in **LaTeX, never .md** (house
+  rule). Bibliography, figures, and generated assets flow in from the store.
+- **CAD → 3D product** — CAD ref → 3D model (Hunyuan3D-class packs) → turntable /
+  GLB, editable in a 3D viewport.
+- **CAD → product mockup** (fashion, packaging, any) — CAD/dieline → photoreal
+  mockup via the try-on/relight graph (the karma pipeline, generalized).
+- **Deck / doc / site** — the code-canvas mode (Claude-Design pattern).
+Each mode is just a front-end over the KIND's workflow + `exec`; the node editor
+(Advanced) is always available as the universal fallback.
+
 ## Surfaces
 - **Chat-first home (default):** monochrome Hanzo look, "What should we create?",
   design-system + template + model pickers, projects/assets below. Served by the
